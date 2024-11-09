@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Login - Integrare</title>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Ubuntu:wght@400;500&display=swap" rel="stylesheet">
+   <link rel="icon" type="image/png" href="logo-icone.png">
+   <style>
+       :root {
+           --primary-bg: #e1e3ee;
+           --primary-text: #4c649b;
+           --accent: #e67c7c;
+           --secondary: #6b7cab;
+           --action: #f36f6f;
+           --white: #ffffff;
+           --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+           --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+           --transition: all 0.3s ease;
+       }
+
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+       }
+
+       body {
+           min-height: 100vh;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           background: var(--primary-bg);
+           font-family: 'Ubuntu', sans-serif;
+           padding: 1rem;
+       }
+
+       .login-container {
+           width: 100%;
+           max-width: 400px;
+           background: var(--white);
+           border-radius: 16px;
+           box-shadow: var(--shadow-md);
+           overflow: hidden;
+       }
+
+       .login-header {
+           text-align: center;
+           padding: 2rem;
+       }
+
+       .logo-container {
+           margin-bottom: 1.5rem;
+       }
+
+       .logo-container img {
+           height: 48px;
+       }
+
+       .logo-icon {
+           width: 64px;
+           height: 64px;
+           border-radius: 16px;
+           background: var(--primary-bg);
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           margin: 0 auto 1rem;
+           overflow: hidden;
+       }
+
+       .logo-icon img {
+           width: 40px;
+           height: 40px;
+           object-fit: contain;
+       }
+
+       .login-title {
+           font-family: 'Poppins', sans-serif;
+           font-weight: 600;
+           color: var(--primary-text);
+           margin-bottom: 0.5rem;
+       }
+
+       .login-subtitle {
+           color: var(--secondary);
+           font-size: 0.875rem;
+       }
+
+       .login-form {
+           padding: 0 2rem 2rem;
+       }
+
+       .form-group {
+           margin-bottom: 1.5rem;
+       }
+
+       .form-label {
+           display: block;
+           color: var(--primary-text);
+           margin-bottom: 0.5rem;
+           font-weight: 500;
+       }
+
+       .form-input {
+           width: 100%;
+           padding: 0.875rem 1rem;
+           border: 2px solid var(--primary-bg);
+           border-radius: 8px;
+           transition: var(--transition);
+           font-family: 'Ubuntu', sans-serif;
+       }
+
+       .form-input:focus {
+           outline: none;
+           border-color: var(--accent);
+       }
+
+       .form-button {
+           width: 100%;
+           padding: 1rem;
+           background: var(--action);
+           color: var(--white);
+           border: none;
+           border-radius: 8px;
+           font-weight: 500;
+           cursor: pointer;
+           transition: var(--transition);
+           font-family: 'Ubuntu', sans-serif;
+       }
+
+       .form-button:hover {
+           opacity: 0.9;
+           transform: translateY(-1px);
+       }
+
+       .error-message {
+           background: var(--accent);
+           color: var(--white);
+           padding: 1rem;
+           border-radius: 8px;
+           margin-bottom: 1.5rem;
+           font-size: 0.875rem;
+           display: none;
+       }
+
+       .login-footer {
+           text-align: center;
+           padding-top: 1.5rem;
+           border-top: 1px solid var(--primary-bg);
+           color: var(--secondary);
+           font-size: 0.875rem;
+       }
+
+       @media (max-width: 480px) {
+           .login-container {
+               border-radius: 0;
+           }
+       }
+   </style>
+</head>
+<body>
+   <div class="login-container">
+       <div class="login-header">
+           <div class="logo-icon">
+               <img src="logo-icone-branco.png" alt="Integrare Icon">
+           </div>
+           <div class="logo-container">
+               <img src="logo.png" alt="Integrare">
+           </div>
+           <h1 class="login-title">Bem-vindo</h1>
+           <p class="login-subtitle">Faça login para continuar</p>
+       </div>
+
+       <form class="login-form" onsubmit="handleLogin(event)">
+           <div class="error-message" id="errorMessage">
+               Email ou senha incorretos
+           </div>
+
+           <div class="form-group">
+               <label class="form-label">Email</label>
+               <input 
+                   type="email" 
+                   class="form-input" 
+                   id="email" 
+                   placeholder="Seu email"
+                   required
+               >
+           </div>
+
+           <div class="form-group">
+               <label class="form-label">Senha</label>
+               <input 
+                   type="password" 
+                   class="form-input" 
+                   id="password" 
+                   placeholder="Sua senha"
+                   required
+               >
+           </div>
+
+           <button type="submit" class="form-button">
+               Entrar
+           </button>
+
+           <div class="login-footer">
+               Integrare © 2024
+           </div>
+       </form>
+   </div>
+
+   <script>
+       // Usuário padrão para teste
+       const defaultUsers = [
+           {
+               email: 'admin@integrare.com',
+               password: 'admin123',
+               role: 'admin'
+           }
+       ];
+
+       // Inicializa usuários no localStorage se não existirem
+       if (!localStorage.getItem('users')) {
+           localStorage.setItem('users', JSON.stringify(defaultUsers));
+       }
+
+       // Handle login
+       function handleLogin(event) {
+           event.preventDefault();
+           
+           const email = document.getElementById('email').value;
+           const password = document.getElementById('password').value;
+           const errorMessage = document.getElementById('errorMessage');
+           
+           const users = JSON.parse(localStorage.getItem('users'));
+           const user = users.find(u => u.email === email && u.password === password);
+           
+           if (user) {
+               localStorage.setItem('currentUser', JSON.stringify({
+                   email: user.email,
+                   role: user.role
+               }));
+               
+               window.location.href = user.role === 'admin' ? 'admin.html' : 'kanban.html';
+           } else {
+               errorMessage.style.display = 'block';
+               setTimeout(() => {
+                   errorMessage.style.display = 'none';
+               }, 3000);
+           }
+       }
+
+       // Check if already logged in
+       window.onload = function() {
+           const currentUser = localStorage.getItem('currentUser');
+           if (currentUser) {
+               const user = JSON.parse(currentUser);
+               window.location.href = user.role === 'admin' ? 'admin.html' : 'kanban.html';
+           }
+       }
+   </script>
+</body>
+</html>
