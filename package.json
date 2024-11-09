@@ -1,0 +1,29 @@
+{
+  "name": "sistema-de-agencia",
+  "version": "2.1.2",
+  "description": "Sistema de Agência v.2.1.2 para gerenciamento de projetos e conteúdos.",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "keywords": [
+    "agencia",
+    "sistema",
+    "projetos",
+    "conteudo",
+    "react"
+  ],
+  "author": "Seu Nome",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-scripts": "5.0.0",
+    "axios": "^0.27.2",
+    "moment": "^2.29.4"
+  },
+  "devDependencies": {}
+}
