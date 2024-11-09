@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Admin - Integrare</title>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Ubuntu:wght@400;500&display=swap" rel="stylesheet">
+   <link rel="icon" type="image/png" href="logo-icone.png">
+   <style>
+       :root {
+           --primary-bg: #e1e3ee;
+           --primary-text: #4c649b;
+           --accent: #e67c7c;
+           --secondary: #6b7cab;
+           --action: #f36f6f;
+           --white: #ffffff;
+           --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+           --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+           --transition: all 0.3s ease;
+       }
+
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+           font-family: 'Ubuntu', sans-serif;
+       }
+
+       body {
+           background: var(--primary-bg);
+           min-height: 100vh;
+       }
+
+       .header {
+           background: var(--white);
+           padding: 1rem 2rem;
+           box-shadow: var(--shadow-sm);
+           position: fixed;
+           width: 100%;
+           top: 0;
+           z-index: 100;
+       }
+
+       .header-content {
+           max-width: 1400px;
+           margin: 0 auto;
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+       }
+
+       .logo img {
+           height: 40px;
+       }
+
+       .nav-actions {
+           display: flex;
+           gap: 1rem;
+           align-items: center;
+       }
+
+       .admin-name {
+           color: var(--primary-text);
+           font-weight: 500;
+       }
+
+       .main-content {
+           max-width: 1400px;
+           margin: 0 auto;
+           padding: 2rem;
+           margin-top: 90px;
+       }
+
+       .grid-dashboard {
+           display: grid;
+           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+           gap: 1.5rem;
+           margin-bottom: 2rem;
+       }
+
+       .dashboard-card {
+           background: var(--white);
+           border-radius: 12px;
+           padding: 1.5rem;
+           box-shadow: var(--shadow-sm);
+           transition: var(--transition);
+       }
+
+       .dashboard-card:hover {
+           transform: translateY(-2px);
+           box-shadow: var(--shadow-md);
+       }
+
+       .card-header {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           margin-bottom: 1.5rem;
+       }
+
+       .card-title {
+           font-family: 'Poppins', sans-serif;
+           font-weight: 600;
+           color: var(--primary-text);
+           display: flex;
+           align-items: center;
+           gap: 0.75rem;
+       }
+
+       .card-icon {
+           width: 40px;
+           height: 40px;
+           background: var(--primary-bg);
+           border-radius: 10px;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           color: var(--primary-text);
+       }
+
+       .stat-grid {
+           display: grid;
+           grid-template-columns: repeat(2, 1fr);
+           gap: 1rem;
+           margin-bottom: 1rem;
+       }
+
+       .stat-item {
+           background: var(--primary-bg);
+           padding: 1rem;
+           border-radius: 8px;
+           text-align: center;
+       }
+
+       .stat-value {
+           font-size: 1.5rem;
+           font-weight: 600;
+           color: var(--primary-text);
+           margin-bottom: 0.25rem;
+       }
+
+       .stat-label {
+           font-size: 0.875rem;
+           color: var(--secondary);
+       }
+
+       .user-list {
+           margin-top: 1rem;
+       }
+
+       .user-item {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           padding: 0.75rem;
+           border-radius: 8px;
+           margin-bottom: 0.5rem;
+           transition: var(--transition);
+       }
+
+       .user-item:hover {
+           background: var(--primary-bg);
+       }
+
+       .user-info {
+           display: flex;
+           align-items: center;
+           gap: 0.75rem;
+       }
+
+       .user-avatar {
+           width: 32px;
+           height: 32px;
+           border-radius: 8px;
+           background: var(--accent);
+           color: var(--white);
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           font-weight: 500;
+       }
+
+       .user-details h4 {
+           color: var(--primary-text);
+           font-weight: 500;
+           font-size: 0.875rem;
+       }
+
+       .user-details p {
+           color: var(--secondary);
+           font-size: 0.75rem;
+       }
+
+       .user-actions {
+           display: flex;
+           gap: 0.5rem;
+       }
+
+       .action-button {
+           padding: 0.5rem;
+           border-radius: 6px;
+           border: none;
+           background: var(--primary-bg);
+           color: var(--primary-text);
+           cursor: pointer;
+           transition: var(--transition);
+       }
+
+       .action-button:hover {
+           background: var(--accent);
+           color: var(--white);
+       }
+
+       .settings-form {
+           display: grid;
+           gap: 1rem;
+       }
+
+       .form-group {
+           margin-bottom: 1rem;
+       }
+
+       .form-label {
+           display: block;
+           margin-bottom: 0.5rem;
+           color: var(--primary-text);
+           font-weight: 500;
+       }
+
+       .form-input {
+           width: 100%;
+           padding: 0.75rem;
+           border: 2px solid var(--primary-bg);
+           border-radius: 8px;
+           font-family: inherit;
+           transition: var(--transition);
+       }
+
+       .form-input:focus {
+           outline: none;
+           border-color: var(--accent);
+       }
+
+       .btn {
+           padding: 0.75rem 1.5rem;
+           border-radius: 8px;
+           border: none;
+           cursor: pointer;
+           font-weight: 500;
+           transition: var(--transition);
+       }
+
+       .btn-primary {
+           background: var(--action);
+           color: var(--white);
+       }
+
+       .btn-secondary {
+           background: var(--primary-bg);
+           color: var(--primary-text);
+       }
+
+       .modal {
+           display: none;
+           position: fixed;
+           top: 0;
+           left: 0;
+           right: 0;
+           bottom: 0;
+           background: rgba(0,0,0,0.5);
+           z-index: 1000;
+           padding: 2rem;
+       }
+
+       .modal-content {
+           background: var(--white);
+           border-radius: 12px;
+           max-width: 500px;
+           margin: 10vh auto 0;
+           padding: 2rem;
+       }
+
+       .modal-header {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           margin-bottom: 1.5rem;
+       }
+
+       .modal-title {
+           font-family: 'Poppins', sans-serif;
+           font-weight: 600;
+           color: var(--primary-text);
+       }
+
+       .close-modal {
+           background: none;
+           border: none;
+           font-size: 1.5rem;
+           color: var(--secondary);
+           cursor: pointer;
+       }
+
+       .success-message {
+           background: #10b981;
+           color: white;
+           padding: 1rem;
+           border-radius: 8px;
+           margin-bottom: 1rem;
+           display: none;
+       }
+
+       @media (max-width: 768px) {
+           .grid-dashboard {
+               grid-template-columns: 1fr;
+           }
+
+           .stat-grid {
+               grid-template-columns: 1fr;
+           }
+
+           .modal {
+               padding: 1rem;
+           }
+       }
+   </style>
+</head>
+<body>
+   <header class="header">
+       <div class="header-content">
+           <a href="#" class="logo">
+               <img src="logo.png" alt="Integrare">
+           </a>
+           <div class="nav-actions">
+               <button class="btn btn-secondary" onclick="location.href='kanban.html'">Ver Kanban</button>
+               <button class="btn btn-secondary" onclick="logout()">Sair</button>
+           </div>
+       </div>
+   </header>
+
+   <main class="main-content">
+       <div class="success-message" id="successMessage"></div>
+       
+       <div class="grid-dashboard">
+           <!-- Usuários -->
+           <div class="dashboard-card">
+               <div class="card-header">
+                   <h2 class="card-title">
+                       <div class="card-icon">
+                           <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                               <circle cx="9" cy="7" r="4"/>
+                               <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                               <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                           </svg>
+                       </div>
+                       Usuários
+                   </h2>
+                   <button class="btn btn-secondary" onclick="openUserModal()">Adicionar</button>
+               </div>
+
+               <div class="stat-grid">
+                   <div class="stat-item">
+                       <div class="stat-value" id="totalUsers">0</div>
+                       <div class="stat-label">Total</div>
+                   </div>
+                   <div class="stat-item">
+                       <div class="stat-value" id="adminUsers">0</div>
+                       <div class="stat-label">Admins</div>
+                   </div>
+               </div>
+
+               <div class="user-list" id="usersList">
+                   <!-- Usuários serão inseridos aqui -->
+               </div>
+           </div>
+
+           <!-- Configurações -->
+           <div class="dashboard-card">
+               <div class="card-header">
+                   <h2 class="card-title">
+                       <div class="card-icon">
+                           <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                               <circle cx="12" cy="12" r="3"/>
+                               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                           </svg>
+                       </div>
+                       Configurações
+                   </h2>
+               </div>
+
+               <form class="settings-form" onsubmit="saveSettings(event)">
+                   <div class="form-group">
+                       <label class="form-label">Nome do Sistema</label>
+                       <input type="text" class="form-input" id="systemName" value="Integrare">
+                   </div>
+
+                   <div class="form-group">
+                       <label class="form-label">Descrição</label>
+                       <textarea class="form-input" id="systemDescription" rows="3">Sistema de Gestão Integrare</textarea>
+                   </div>
+
+                   <button type="submit" class="btn btn-primary">Salvar Configurações</button>
+               </form>
+           </div>
+
+           <!-- Status do Sistema -->
+           <div class="dashboard-card">
+               <div class="card-header">
+                   <h2 class="card-title">
+                       <div class="card-icon">
+                           <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                               <path d="M12 20V10"/>
+                               <path d="M18 20V4"/>
+                               <path d="M6 20v-4"/>
+                           </svg>
+                       </div>
+                       Status do Sistema
+                   </h2>
+               </div>
+
+               <div class="stat-grid">
+                   <div class="stat-item">
+<div class="stat-value" id="totalTasks">0</div>
+                       <div class="stat-label">Tarefas</div>
+                   </div>
+                   <div class="stat-item">
+                       <div class="stat-value" id="totalClients">0</div>
+                       <div class="stat-label">Clientes</div>
+                   </div>
+                   <div class="stat-item">
+                       <div class="stat-value" id="totalPosts">0</div>
+                       <div class="stat-label">Posts</div>
+                   </div>
+                   <div class="stat-item">
+                       <div class="stat-value" id="completedTasks">0</div>
+                       <div class="stat-label">Concluídas</div>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </main>
+
+   <!-- Modal de Novo Usuário -->
+   <div class="modal" id="userModal">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h2 class="modal-title">Novo Usuário</h2>
+               <button class="close-modal" onclick="closeModal()">&times;</button>
+           </div>
+           <form id="userForm" onsubmit="saveUser(event)">
+               <input type="hidden" id="userId">
+               <div class="form-group">
+                   <label class="form-label">Email</label>
+                   <input type="email" class="form-input" id="userEmail" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">Senha</label>
+                   <input type="password" class="form-input" id="userPassword" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">Tipo</label>
+                   <select class="form-input" id="userRole">
+                       <option value="user">Usuário</option>
+                       <option value="admin">Administrador</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <button type="submit" class="btn btn-primary">Salvar</button>
+                   <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+               </div>
+           </form>
+       </div>
+   </div>
+
+   <script>
+       // Verificação de Admin
+       const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+       if (!currentUser || currentUser.role !== 'admin') {
+           window.location.href = 'login.html';
+       }
+
+       // Funções de Usuário
+       function openUserModal() {
+           document.getElementById('userForm').reset();
+           document.getElementById('userId').value = '';
+           document.getElementById('userModal').style.display = 'block';
+       }
+
+       function closeModal() {
+           document.getElementById('userModal').style.display = 'none';
+       }
+
+       function saveUser(event) {
+           event.preventDefault();
+           
+           const id = document.getElementById('userId').value;
+           const email = document.getElementById('userEmail').value;
+           const password = document.getElementById('userPassword').value;
+           const role = document.getElementById('userRole').value;
+
+           let users = JSON.parse(localStorage.getItem('users')) || [];
+
+           if (id) {
+               users = users.map(user => user.id === id ? 
+                   {...user, email, password, role} : user);
+           } else {
+               users.push({
+                   id: Date.now().toString(),
+                   email,
+                   password,
+                   role
+               });
+           }
+
+           localStorage.setItem('users', JSON.stringify(users));
+           loadUsers();
+           closeModal();
+           showSuccess('Usuário salvo com sucesso!');
+       }
+
+       function deleteUser(id) {
+           if (confirm('Tem certeza que deseja excluir este usuário?')) {
+               let users = JSON.parse(localStorage.getItem('users'));
+               users = users.filter(user => user.id !== id);
+               localStorage.setItem('users', JSON.stringify(users));
+               loadUsers();
+               showSuccess('Usuário excluído com sucesso!');
+           }
+       }
+
+       function editUser(id) {
+           const users = JSON.parse(localStorage.getItem('users'));
+           const user = users.find(u => u.id === id);
+           
+           if (user) {
+               document.getElementById('userId').value = user.id;
+               document.getElementById('userEmail').value = user.email;
+               document.getElementById('userPassword').value = user.password;
+               document.getElementById('userRole').value = user.role;
+               document.getElementById('userModal').style.display = 'block';
+           }
+       }
+
+       // Carregar Usuários
+       function loadUsers() {
+           const users = JSON.parse(localStorage.getItem('users')) || [];
+           const usersList = document.getElementById('usersList');
+           
+           usersList.innerHTML = users.map(user => `
+               <div class="user-item">
+                   <div class="user-info">
+                       <div class="user-avatar">${user.email[0].toUpperCase()}</div>
+                       <div class="user-details">
+                           <h4>${user.email}</h4>
+                           <p>${user.role === 'admin' ? 'Administrador' : 'Usuário'}</p>
+                       </div>
+                   </div>
+                   <div class="user-actions">
+                       <button class="action-button" onclick="editUser('${user.id}')">
+                           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                           </svg>
+                       </button>
+                       <button class="action-button" onclick="deleteUser('${user.id}')">
+                           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                               <path d="M3 6h18"/>
+                               <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                           </svg>
+                       </button>
+                   </div>
+               </div>
+           `).join('');
+
+           // Atualizar contadores
+           document.getElementById('totalUsers').textContent = users.length;
+           document.getElementById('adminUsers').textContent = users.filter(u => u.role === 'admin').length;
+       }
+
+       // Configurações
+       function saveSettings(event) {
+           event.preventDefault();
+           
+           const settings = {
+               systemName: document.getElementById('systemName').value,
+               systemDescription: document.getElementById('systemDescription').value
+           };
+
+           localStorage.setItem('systemSettings', JSON.stringify(settings));
+           showSuccess('Configurações salvas com sucesso!');
+       }
+
+       // Carregar Estatísticas
+       function loadStats() {
+           const tasks = JSON.parse(localStorage.getItem('cards')) || [];
+           const clients = JSON.parse(localStorage.getItem('clients')) || [];
+           const posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+           document.getElementById('totalTasks').textContent = tasks.length;
+           document.getElementById('totalClients').textContent = clients.length;
+           document.getElementById('totalPosts').textContent = posts.length;
+           document.getElementById('completedTasks').textContent = 
+               tasks.filter(t => t.status === 'done').length;
+       }
+
+       // Utilitários
+       function showSuccess(message) {
+           const success = document.getElementById('successMessage');
+           success.textContent = message;
+           success.style.display = 'block';
+           setTimeout(() => success.style.display = 'none', 3000);
+       }
+
+       function logout() {
+           localStorage.removeItem('currentUser');
+           window.location.href = 'login.html';
+       }
+
+       // Inicialização
+       document.addEventListener('DOMContentLoaded', () => {
+           loadUsers();
+           loadStats();
+
+           // Carregar configurações salvas
+           const settings = JSON.parse(localStorage.getItem('systemSettings')) || {};
+           if (settings.systemName) {
+               document.getElementById('systemName').value = settings.systemName;
+           }
+           if (settings.systemDescription) {
+               document.getElementById('systemDescription').value = settings.systemDescription;
+           }
+
+           // Fechar modal ao clicar fora
+           window.onclick = function(event) {
+               if (event.target === document.getElementById('userModal')) {
+                   closeModal();
+               }
+           };
+       });
+   </script>
+</body>
+</html>
