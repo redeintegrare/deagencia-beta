@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Contatos - Sistema de Agência</title>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Ubuntu:wght@400;500&display=swap" rel="stylesheet">
+   <link rel="icon" type="image/png" href="logo-icone.png">
+   <style>
+       :root {
+           --primary-bg: #e1e3ee;
+           --primary-text: #4c649b;
+           --accent: #e67c7c;
+           --secondary: #6b7cab;
+           --action: #f36f6f;
+           --white: #ffffff;
+           --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+           --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+           --transition: all 0.3s ease;
+       }
+
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+           font-family: 'Ubuntu', sans-serif;
+       }
+
+       body {
+           background: var(--primary-bg);
+           min-height: 100vh;
+       }
+
+       .header {
+           background: var(--white);
+           padding: 1rem 2rem;
+           box-shadow: var(--shadow-sm);
+           position: fixed;
+           width: 100%;
+           top: 0;
+           z-index: 100;
+       }
+
+       .header-content {
+           max-width: 1400px;
+           margin: 0 auto;
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+       }
+
+       .logo img {
+           height: 40px;
+       }
+
+       .tabs {
+           background: var(--white);
+           margin-top: 74px;
+           padding: 1rem 2rem;
+           border-bottom: 1px solid var(--primary-bg);
+       }
+
+       .tabs-content {
+           max-width: 1400px;
+           margin: 0 auto;
+           display: flex;
+           gap: 1rem;
+       }
+
+       .tab {
+           padding: 0.75rem 1.5rem;
+           border-radius: 8px;
+           cursor: pointer;
+           transition: var(--transition);
+           color: var(--secondary);
+           position: relative;
+       }
+
+       .tab.active {
+           background: var(--primary-bg);
+           color: var(--primary-text);
+           font-weight: 500;
+       }
+
+       .tab-counter {
+           position: absolute;
+           top: -8px;
+           right: -8px;
+           background: var(--action);
+           color: var(--white);
+           font-size: 12px;
+           padding: 2px 6px;
+           border-radius: 10px;
+           font-weight: 500;
+       }
+
+       .main-content {
+           max-width: 1400px;
+           margin: 0 auto;
+           padding: 2rem;
+           margin-top: 40px;
+       }
+
+       .search-bar {
+           display: flex;
+           gap: 1rem;
+           margin-bottom: 2rem;
+       }
+
+       .search-input {
+           flex: 1;
+           padding: 0.75rem 1rem;
+           border: 2px solid var(--primary-bg);
+           border-radius: 8px;
+           font-family: 'Ubuntu', sans-serif;
+           transition: var(--transition);
+       }
+
+       .search-input:focus {
+           outline: none;
+           border-color: var(--accent);
+       }
+
+       .contacts-grid {
+           display: grid;
+           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+           gap: 1.5rem;
+       }
+
+       .contact-card {
+           background: var(--white);
+           border-radius: 12px;
+           overflow: hidden;
+           box-shadow: var(--shadow-sm);
+           transition: var(--transition);
+       }
+
+       .contact-card:hover {
+           box-shadow: var(--shadow-md);
+           transform: translateY(-2px);
+       }
+
+       .contact-header {
+           padding: 1rem;
+           display: flex;
+           align-items: center;
+           gap: 1rem;
+           border-bottom: 1px solid var(--primary-bg);
+       }
+
+       .contact-avatar {
+           width: 48px;
+           height: 48px;
+           border-radius: 8px;
+           background: var(--primary-bg);
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           overflow: hidden;
+       }
+
+       .contact-avatar img {
+           width: 100%;
+           height: 100%;
+           object-fit: cover;
+       }
+
+       .contact-title {
+           flex: 1;
+       }
+
+       .contact-name {
+           font-family: 'Poppins', sans-serif;
+           font-weight: 500;
+           color: var(--primary-text);
+           margin-bottom: 0.25rem;
+       }
+
+       .contact-type {
+           font-size: 0.875rem;
+           color: var(--secondary);
+       }
+
+       .contact-content {
+           padding: 1rem;
+       }
+
+       .contact-info {
+           margin-bottom: 0.5rem;
+           font-size: 0.875rem;
+       }
+
+       .contact-label {
+           color: var(--secondary);
+           margin-bottom: 0.25rem;
+       }
+
+       .contact-value {
+           color: var(--primary-text);
+           font-weight: 500;
+       }
+
+       .contact-actions {
+           padding: 1rem;
+           border-top: 1px solid var(--primary-bg);
+           display: flex;
+           justify-content: flex-end;
+           gap: 0.5rem;
+       }
+
+       .action-button {
+           padding: 0.5rem;
+           border-radius: 6px;
+           border: none;
+           background: var(--primary-bg);
+           color: var(--primary-text);
+           cursor: pointer;
+           transition: var(--transition);
+       }
+
+       .action-button:hover {
+           background: var(--accent);
+           color: var(--white);
+       }
+
+       .floating-button {
+           position: fixed;
+           bottom: 2rem;
+           right: 2rem;
+           width: 56px;
+           height: 56px;
+           border-radius: 50%;
+           background: var(--action);
+           color: var(--white);
+           border: none;
+           cursor: pointer;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           box-shadow: var(--shadow-md);
+           transition: var(--transition);
+       }
+
+       .floating-button:hover {
+           transform: translateY(-2px);
+           box-shadow: 0 6px 8px rgba(0,0,0,0.1);
+       }
+
+       .modal {
+           display: none;
+           position: fixed;
+           top: 0;
+           left: 0;
+           right: 0;
+           bottom: 0;
+           background: rgba(0,0,0,0.5);
+           z-index: 1000;
+           padding: 2rem;
+       }
+
+       .modal-content {
+           background: var(--white);
+           border-radius: 12px;
+           max-width: 500px;
+           margin: 0 auto;
+           padding: 2rem;
+           position: relative;
+           margin-top: 10vh;
+       }
+
+       .modal-header {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           margin-bottom: 1.5rem;
+       }
+
+       .modal-title {
+           font-family: 'Poppins', sans-serif;
+           font-weight: 600;
+           color: var(--primary-text);
+       }
+
+       .close-modal {
+           background: none;
+           border: none;
+           font-size: 1.5rem;
+           color: var(--secondary);
+           cursor: pointer;
+       }
+
+       .form-group {
+           margin-bottom: 1rem;
+       }
+
+       .form-label {
+           display: block;
+           margin-bottom: 0.5rem;
+           color: var(--primary-text);
+           font-weight: 500;
+       }
+
+       .form-input {
+           width: 100%;
+           padding: 0.75rem;
+           border: 2px solid var(--primary-bg);
+           border-radius: 8px;
+           font-family: 'Ubuntu', sans-serif;
+           transition: var(--transition);
+       }
+
+       .form-input:focus {
+           outline: none;
+           border-color: var(--accent);
+       }
+
+       .form-select {
+           width: 100%;
+           padding: 0.75rem;
+           border: 2px solid var(--primary-bg);
+           border-radius: 8px;
+           font-family: 'Ubuntu', sans-serif;
+           transition: var(--transition);
+           background: var(--white);
+       }
+
+       .modal-footer {
+           margin-top: 2rem;
+           display: flex;
+           justify-content: flex-end;
+           gap: 1rem;
+       }
+
+       .btn {
+           padding: 0.75rem 1.5rem;
+           border-radius: 8px;
+           border: none;
+           cursor: pointer;
+           transition: var(--transition);
+           font-family: 'Ubuntu', sans-serif;
+           font-weight: 500;
+       }
+
+       .btn-primary {
+           background: var(--action);
+           color: var(--white);
+       }
+
+       .btn-secondary {
+           background: var(--primary-bg);
+           color: var(--primary-text);
+       }
+
+       @media (max-width: 768px) {
+           .tabs-content {
+               flex-wrap: wrap;
+           }
+
+           .search-bar {
+               flex-direction: column;
+           }
+
+           .modal {
+               padding: 1rem;
+           }
+       }
+   </style>
+</head>
+<body>
+   <header class="header">
+       <div class="header-content">
+           <a href="#" class="logo">
+               <img src="logo.png" alt="Integrare">
+           </a>
+           <button class="floating-button" style="position: static;" onclick="location.href='kanban.html'">
+               <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                   <path d="M19 12H5M12 19l-7-7 7-7"/>
+               </svg>
+           </button>
+       </div>
+   </header>
+
+   <div class="tabs">
+       <div class="tabs-content">
+           <div class="tab active" onclick="changeTab('clients')">
+               Clientes
+               <span class="tab-counter">0</span>
+           </div>
+           <div class="tab" onclick="changeTab('members')">
+               Membros
+               <span class="tab-counter">0</span>
+           </div>
+           <div class="tab" onclick="changeTab('leads')">
+               Leads
+               <span class="tab-counter">0</span>
+           </div>
+       </div>
+   </div>
+
+   <main class="main-content">
+       <div class="search-bar">
+           <input type="text" class="search-input" placeholder="Buscar contatos..." onkeyup="filterContacts()">
+           <select class="search-input" onchange="filterContacts()">
+               <option value="">Todos os tipos</option>
+               <option value="client">Cliente</option>
+               <option value="member">Membro</option>
+               <option value="lead">Lead</option>
+           </select>
+       </div>
+
+       <div class="contacts-grid" id="contactsGrid">
+           <!-- Contatos serão gerados via JavaScript -->
+       </div>
+   </main>
+
+   <button class="floating-button" onclick="openNewContactModal()">
+       <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+           <line x1="12" y1="5" x2="12" y2="19"/>
+           <line x1="5" y1="12" x2="19" y2="12"/>
+       </svg>
+   </button>
+
+   <div class="modal" id="contactModal">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h2 class="modal-title">Novo Contato</h2>
+               <button class="close-modal" onclick="closeModal()">&times;</button>
+           </div>
+           <form id="contactForm" onsubmit="saveContact(event)">
+               <input type="hidden" id="contactId">
+               <div class="form-group">
+                   <label class="form-label">Tipo</label>
+                   <select class="form-select" id="contactType" required>
+                       <option value="client">Cliente</option>
+                       <option value="member">Membro</option>
+                       <option value="lead">Lead</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">Nome</label>
+                   <input type="text" class="form-input" id="contactName" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">Email</label>
+                   <input type="email" class="form-input" id="contactEmail" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">Telefone</label>
+                   <input type="tel" class="form-input" id="contactPhone">
+               </div>
+               <div class="form-group">
+                   <label class="form-label">WhatsApp</label>
+                   <input type="tel" class="form-input" id="contactWhatsapp">
+               </div>
+               <div class="form-group">
+                   <label class="form-label">Documento</label>
+                   <input type="text" class="form-input" id="contactDocument">
+               </div>
+               <div class="form-group">
+                   <label class="form-label">Cidade</label>
+                   <input type="text" class="form-input" id="contactCity">
+               </div>
+               <div class="modal-footer">
+                   <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                   <button type="submit" class="btn btn-primary">Salvar</button>
+               </div>
+           </form>
+       </div>
+   </div>
+
+   <script>
+       // Estado global
+       let currentTab = 'clients';
+       let contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+
+       function changeTab(tab) {
+           currentTab = tab;
+           document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+           document.querySelector(`.tab:nth-child(${tab === 'clients' ? 1 : tab === 'members' ? 2 : 3})`).classList.add('active');
+           renderContacts();
+           updateCounters();
+       }
+
+       function renderContacts() {
+           const grid = document.getElementById('contactsGrid');
+           const filteredContacts = contacts.filter(c => c.type === currentTab.slice(0, -1));
+grid.innerHTML = filteredContacts.map(contact => `
+               <div class="contact-card">
+                   <div class="contact-header">
+                       <div class="contact-avatar">
+                           ${contact.type === 'client' ? 
+                               `<img src="${contact.logo || 'logo-icone.png'}" alt="${contact.name}">` :
+                               contact.name.charAt(0)}
+                       </div>
+                       <div class="contact-title">
+                           <div class="contact-name">${contact.name}</div>
+                           <div class="contact-type">${
+                               contact.type === 'client' ? 'Cliente' :
+                               contact.type === 'member' ? 'Membro' : 'Lead'
+                           }</div>
+                       </div>
+                   </div>
+                   <div class="contact-content">
+                       <div class="contact-info">
+                           <div class="contact-label">Email</div>
+                           <div class="contact-value">${contact.email}</div>
+                       </div>
+                       <div class="contact-info">
+                           <div class="contact-label">Telefone</div>
+                           <div class="contact-value">${contact.phone || '-'}</div>
+                       </div>
+                       <div class="contact-info">
+                           <div class="contact-label">WhatsApp</div>
+                           <div class="contact-value">${contact.whatsapp || '-'}</div>
+                       </div>
+                       <div class="contact-info">
+                           <div class="contact-label">Documento</div>
+                           <div class="contact-value">${contact.document || '-'}</div>
+                       </div>
+                       <div class="contact-info">
+                           <div class="contact-label">Cidade</div>
+                           <div class="contact-value">${contact.city || '-'}</div>
+                       </div>
+                   </div>
+                   <div class="contact-actions">
+                       <button class="action-button" onclick="editContact('${contact.id}')">
+                           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                           </svg>
+                       </button>
+                       <button class="action-button" onclick="deleteContact('${contact.id}')">
+                           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                               <path d="M3 6h18"/>
+                               <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                           </svg>
+                       </button>
+                   </div>
+               </div>
+           `).join('');
+       }
+
+       function updateCounters() {
+           const types = ['client', 'member', 'lead'];
+           types.forEach((type, index) => {
+               const count = contacts.filter(c => c.type === type).length;
+               document.querySelector(`.tab:nth-child(${index + 1}) .tab-counter`).textContent = count;
+           });
+       }
+
+       function openNewContactModal() {
+           document.getElementById('contactForm').reset();
+           document.getElementById('contactId').value = '';
+           document.getElementById('contactType').value = currentTab.slice(0, -1);
+           document.getElementById('contactModal').style.display = 'block';
+       }
+
+       function closeModal() {
+           document.getElementById('contactModal').style.display = 'none';
+       }
+
+       function saveContact(event) {
+           event.preventDefault();
+           
+           const id = document.getElementById('contactId').value;
+           const newContact = {
+               id: id || Date.now().toString(),
+               type: document.getElementById('contactType').value,
+               name: document.getElementById('contactName').value,
+               email: document.getElementById('contactEmail').value,
+               phone: document.getElementById('contactPhone').value,
+               whatsapp: document.getElementById('contactWhatsapp').value,
+               document: document.getElementById('contactDocument').value,
+               city: document.getElementById('contactCity').value
+           };
+
+           if (id) {
+               contacts = contacts.map(c => c.id === id ? newContact : c);
+           } else {
+               contacts.push(newContact);
+           }
+
+           localStorage.setItem('contacts', JSON.stringify(contacts));
+           renderContacts();
+           updateCounters();
+           closeModal();
+       }
+
+       function editContact(id) {
+           const contact = contacts.find(c => c.id === id);
+           if (contact) {
+               document.getElementById('contactId').value = contact.id;
+               document.getElementById('contactType').value = contact.type;
+               document.getElementById('contactName').value = contact.name;
+               document.getElementById('contactEmail').value = contact.email;
+               document.getElementById('contactPhone').value = contact.phone || '';
+               document.getElementById('contactWhatsapp').value = contact.whatsapp || '';
+               document.getElementById('contactDocument').value = contact.document || '';
+               document.getElementById('contactCity').value = contact.city || '';
+               document.getElementById('contactModal').style.display = 'block';
+           }
+       }
+
+       function deleteContact(id) {
+           if (confirm('Tem certeza que deseja excluir este contato?')) {
+               contacts = contacts.filter(c => c.id !== id);
+               localStorage.setItem('contacts', JSON.stringify(contacts));
+               renderContacts();
+               updateCounters();
+           }
+       }
+
+       function filterContacts() {
+           const searchTerm = document.querySelector('.search-input').value.toLowerCase();
+           const typeFilter = document.querySelector('select').value;
+           
+           contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+           contacts = contacts.filter(contact => {
+               const matchSearch = contact.name.toLowerCase().includes(searchTerm) ||
+                                 contact.email.toLowerCase().includes(searchTerm);
+               const matchType = !typeFilter || contact.type === typeFilter;
+               return matchSearch && matchType;
+           });
+
+           renderContacts();
+       }
+
+       function checkAuth() {
+           const user = localStorage.getItem('currentUser');
+           if (!user) {
+               window.location.href = 'login.html';
+           }
+       }
+
+       document.addEventListener('DOMContentLoaded', () => {
+           checkAuth();
+           renderContacts();
+           updateCounters();
+
+           window.onclick = function(event) {
+               const modal = document.getElementById('contactModal');
+               if (event.target === modal) {
+                   closeModal();
+               }
+           };
+       });
+   </script>
+</body>
+</html>
